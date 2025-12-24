@@ -22,4 +22,24 @@
 3. flutter run
 
 ## Screenshots
-[Add 6-8 screenshots here — onboarding, login, register, empty task list, tasks with complete/edit, add task page]
+
+### Onboarding
+![Onboarding](screenshots/onboarding.jpeg)
+
+### Login
+![Login](screenshots/login.jpeg)
+
+### Register
+![Register](screenshots/register.jpeg)
+
+### Home
+![Home](screenshots/home.jpeg)
+
+### Add Task
+![Add Task](screenshots/add_task.jpeg)
+
+### Added Task List
+![Added Task List](screenshots/task_list.jpeg)
+
+### Edit Task
+![Edit Task](screenshots/edit_task.jpeg)
