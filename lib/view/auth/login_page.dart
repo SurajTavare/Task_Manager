@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../../Controller/login_controller.dart';
+import '../../widgets/CustomTextField.dart';
 import 'Register_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -140,53 +141,50 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: height * 0.03),
-                      TextField(
-                        controller: logincontroller.emailController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          labelText: 'Email',
-                          prefixIcon: Icon(Icons.email_outlined),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      TextField(
+                    CustomTextField(
+                      controller: logincontroller.emailController,
+                      hintText: 'Email',
+                      prefixIcon: Icons.email_outlined,
+                    ),
+
+                    SizedBox(height: 15),
+                      Obx(() => CustomTextField(
                         controller: logincontroller.passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          labelText: 'Password',
-                          prefixIcon: Icon(Icons.lock_outline),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: height * 0.04),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade400,
-                          foregroundColor: Colors.white,
-                          elevation: 8,
-                          shadowColor: Colors.blue.withOpacity(0.4),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.2,
-                            vertical: height * 0.02,
-                          ),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        ),
-                        onPressed: () {
-                          logincontroller.login();
+                        hintText: 'Password',
+                        prefixIcon: Icons.lock_outline,
+                        obscureText: !logincontroller.isPasswordVisible.value,
+                        suffixIcon: logincontroller.isPasswordVisible.value
+                            ? const Icon(Icons.remove_red_eye)
+                            : const Icon(Icons.visibility_off),
+                        onSuffixTap: () {
+                          logincontroller.isPasswordVisible.value =
+                          !logincontroller.isPasswordVisible.value;
                         },
-                        child: Text(
-                          'Login',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),),
+                      SizedBox(height: height * 0.04),
+                      Obx(
+                        ()=> ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade400,
+                            foregroundColor: Colors.white,
+                            elevation: 8,
+                            shadowColor: Colors.blue.withOpacity(0.4),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.2,
+                              vertical: height * 0.02,
+                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          ),
+                          onPressed: () {
+                            logincontroller.login();
+                          },
+                          child:
+                          logincontroller.isLoading.value
+                              ? CircularProgressIndicator.adaptive()
+                              : Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
 

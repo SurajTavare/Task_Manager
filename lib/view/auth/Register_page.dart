@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:lottie/lottie.dart';
-
 import '../../Controller/regiter_controller.dart';
+import '../../widgets/CustomTextField.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -115,78 +113,52 @@ class RegisterPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.08),
-                      child: TextField(
+                      child: CustomTextField(
                         controller: registerController.emailController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          labelText: 'Email',
-                          prefixIcon: Icon(Icons.email_outlined),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
+                        hintText: 'Email',
+                        prefixIcon: Icons.email_outlined,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Obx(
-                      () => Padding(
+                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: width * 0.08),
-                        child: TextField(
-                          controller: registerController.passwordController,
-                          obscureText: !registerController.isPasswordVisible.value,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.8),
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                registerController.isPasswordVisible.value =
-                                    !registerController.isPasswordVisible.value;
-                              },
-                              icon: registerController.isPasswordVisible.value
-                                  ? Icon(Icons.remove_red_eye)
-                                  : Icon(Icons.add),
-                            ),
+                        child: Obx(
+                          () => CustomTextField(
+                            controller: registerController.passwordController,
+                            hintText: 'Password',
+                            prefixIcon: Icons.lock_outline,
+                            obscureText: !registerController.isPasswordVisible.value,
+                            suffixIcon: registerController.isPasswordVisible.value
+                                ? const Icon(Icons.remove_red_eye)
+                                : const Icon(Icons.visibility_off),
+                            onSuffixTap: () {
+                              registerController.isPasswordVisible.value =
+                                  !registerController.isPasswordVisible.value;
+                            },
                           ),
                         ),
                       ),
-                    ),
+
                     const SizedBox(height: 16),
-                    Obx(
-                      () => Padding(
+                    Padding(
                         padding: EdgeInsets.symmetric(horizontal: width * 0.08),
-                        child: TextField(
-                          controller: registerController.confirmPasswordController,
-                          obscureText: !registerController.isConfirmPasswordVisible.value,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.8),
-                            labelText: 'Confirm Password',
-                            prefixIcon: Icon(Icons.lock_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                registerController.isConfirmPasswordVisible.value =
-                                    !registerController.isConfirmPasswordVisible.value;
-                              },
-                              icon: registerController.isConfirmPasswordVisible.value
-                                  ? Icon(Icons.remove_red_eye)
-                                  : Icon(Icons.add),
-                            ),
+                        child: Obx(
+                          () => CustomTextField(
+                            controller: registerController.confirmPasswordController,
+                            hintText: 'Confirm Password',
+                            prefixIcon: Icons.lock_outline,
+                            obscureText: !registerController.isConfirmPasswordVisible.value,
+                            suffixIcon: registerController.isConfirmPasswordVisible.value
+                                ? const Icon(Icons.remove_red_eye)
+                                : const Icon(Icons.visibility_off),
+                            onSuffixTap: () {
+                              registerController.isConfirmPasswordVisible.value =
+                                  !registerController.isConfirmPasswordVisible.value;
+                            },
                           ),
                         ),
                       ),
-                    ),
+
                     SizedBox(height: height * 0.04),
                     Obx(
                       () => ElevatedButton(

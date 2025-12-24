@@ -179,6 +179,7 @@ class _AddEditTaskPageState extends State<AddEditTaskPage> {
                               ],
                             ),
                             child: CustomTextField(
+                              textCapitalization: TextCapitalization.sentences,
                               controller: titleController,
                               hintText: 'e.g., Complete Flutter Assignment',
                               prefixIcon: Icons.edit_rounded,
@@ -202,6 +203,7 @@ class _AddEditTaskPageState extends State<AddEditTaskPage> {
                             ),
                             child: CustomTextField(
                               controller: descriptionController,
+                              textCapitalization: TextCapitalization.sentences,
                               hintText: 'Add some details about your task...',
                               maxLines: 4,
                               contentPadding: const EdgeInsets.all(20),

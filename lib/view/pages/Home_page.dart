@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/Controller/Task_controller.dart';
 
+import '../../Controller/login_controller.dart';
 import '../../widgets/CustomTextField.dart';
 import '../../widgets/Task_card.dart';
 import 'AddEditTaskPage.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TaskController taskController = Get.put(TaskController());
+    final LoginController loginController = Get.put(LoginController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -58,12 +60,25 @@ class HomePage extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment(-0.8, -0.82),
-                  child: Text(
-                    "My Tasks",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: width * 0.09,
-                      color: Colors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "My Tasks",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: width * 0.09,
+                            color: Colors.black,
+                          ),
+                        ),
+                        IconButton(onPressed: (){
+                          loginController.logout();
+
+                        }, icon: Icon(Icons.logout, size: 25,))
+                      ],
                     ),
                   ),
                 ),

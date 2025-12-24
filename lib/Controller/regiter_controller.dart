@@ -38,11 +38,41 @@ class RegisterController extends GetxController {
         email: emailController.text,
         password: passwordController.text,
       );
+      isLoading.value = false;
       Get.offAllNamed('/login');
-    } catch (e) {
+    }
+    on FirebaseAuthException catch (e) {
+      isLoading.value = false;
+
+      String message = 'Registration failed. Please try again.';
+
+      if (e.code == 'weak-password') {
+        message = 'Password is too weak. Use at least 6 characters.';
+      } else if (e.code == 'invalid-email') {
+        message = 'Invalid email format. Please check your email.';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'This email is already registered. Try logging in.';
+      } else {
+        message = e.message ?? message;
+      }
+
+      Get.snackbar(
+        'Error',
+        message,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+
+      print('Firebase Error: ${e.code} - ${e.message}');
+    }
+
+    catch (e) {
       Get.snackbar('Error', e.toString());
       print('Error${e.toString()}');
-    } finally {
+    }
+    finally {
+
       isLoading.value = false;
     }
   }

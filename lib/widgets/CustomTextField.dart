@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String hintText;
@@ -15,7 +14,9 @@ class CustomTextField extends StatelessWidget {
   final bool isSearch;
   final ValueChanged<String>? onChanged;
   final bool? isDense;
-
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final VoidCallback? onSuffixTap;
 
   const CustomTextField({
     super.key,
@@ -24,45 +25,41 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     this.prefixIcon,
     this.maxLines = 1,
-    this.textCapitalization = TextCapitalization.sentences,
-    this.contentPadding =
-    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+    this.textCapitalization = TextCapitalization.none,
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
     this.borderRadius = 20,
     this.fontSize = 16,
     this.fontWeight = FontWeight.w500,
     this.textColor = const Color(0xFF2D3142),
     this.isSearch = false,
     this.onChanged,
-
+    this.obscureText = false,
+    this.suffixIcon,
+    this.onSuffixTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-
       controller: controller,
       maxLines: maxLines,
+      obscureText: obscureText,
       textCapitalization: textCapitalization,
       onChanged: onChanged,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        color: textColor,
-      ),
+      style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor),
       decoration: InputDecoration(
         isDense: isDense,
         filled: true,
         fillColor: Colors.white,
         hintText: hintText,
-        hintStyle: TextStyle(
-          color: Colors.grey.shade400,
-          fontSize: fontSize - 1,
-        ),
+        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: fontSize - 1),
         prefixIcon: prefixIcon != null
-            ? Icon(
-          prefixIcon,
-          color: Colors.purple.shade300,
-          size: 22,
+            ? Icon(prefixIcon, color: Colors.purple.shade300, size: 22)
+            : null,
+        suffixIcon: suffixIcon != null
+            ? IconButton(
+          onPressed: onSuffixTap,
+          icon: suffixIcon!,
         )
             : null,
         contentPadding: contentPadding,
@@ -72,10 +69,7 @@ class CustomTextField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(
-            color: Colors.purple.shade100,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: Colors.purple.shade100, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
