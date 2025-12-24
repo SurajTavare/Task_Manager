@@ -23,23 +23,17 @@
 
 ## Screenshots
 
-### Onboarding
-![Onboarding](screenshots/onboarding.jpeg)
+## Screenshots
 
-### Login
-![Login](screenshots/login.jpeg)
+<p align="center">
+  <img src="screenshots/onboarding.jpeg" width="220" />
+  <img src="screenshots/login.jpeg" width="220" />
+  <img src="screenshots/register.jpeg" width="220" />
+</p>
 
-### Register
-![Register](screenshots/register.jpeg)
-
-### Home
-![Home](screenshots/home.jpeg)
-
-### Add Task
-![Add Task](screenshots/add_task.jpeg)
-
-### Added Task List
-![Added Task List](screenshots/task_list.jpeg)
-
-### Edit Task
-![Edit Task](screenshots/edit_task.jpeg)
+<p align="center">
+  <img src="screenshots/home.jpeg" width="220" />
+  <img src="screenshots/add_task.jpeg" width="220" />
+  <img src="screenshots/task_list.jpeg" width="220" />
+  <img src="screenshots/edit_task.jpeg" width="220" />
+</p>
