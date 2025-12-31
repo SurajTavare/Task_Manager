@@ -1,4 +1,4 @@
-# Gig Worker Task Management App - Whatbytes Assignment
+# Task Management App 
 
 ## Features
 - Beautiful onboarding with Lottie animation and smooth Hero transition
