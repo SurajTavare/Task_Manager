@@ -319,11 +319,11 @@ class _AddEditTaskPageState extends State<AddEditTaskPage> {
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              PriorityChip('low', 'Low', Colors.green),
+                              PriorityChip('Low', 'Low', Colors.green),
                               const SizedBox(width: 12),
-                              PriorityChip('medium', 'Medium', Colors.orange),
+                              PriorityChip('Medium', 'Medium', Colors.orange),
                               const SizedBox(width: 12),
-                              PriorityChip('high', 'High', Colors.red),
+                              PriorityChip('High', 'High', Colors.red),
                             ],
                           ),
                           SizedBox(height: height * 0.05),

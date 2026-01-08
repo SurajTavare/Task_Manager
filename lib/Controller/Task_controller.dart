@@ -2,42 +2,73 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_manager/model/task_model.dart';
+
+import '../model/task_model.dart';
 
 class TaskController extends GetxController {
   final RxList<TaskModel> tasks = <TaskModel>[].obs;
-  final RxList<TaskModel> searchTasks = <TaskModel>[].obs;
+  final RxList<TaskModel> filteredTasks = <TaskModel>[].obs;
 
   final RxString searchQuery = ''.obs;
   final RxBool isLoading = false.obs;
-
   final RxString activeFilter = 'all'.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    loadTask();
+  }
+
+  void searchTask(String query) {
+    searchQuery.value = query;
+    if (query.isEmpty) {
+      filteredTasks.value = tasks;
+    } else {
+      filteredTasks.value = tasks.where((tasks) {
+        final titleMatch = tasks.title.toLowerCase().contains(query.toLowerCase());
+        final descMatch = tasks.description.toLowerCase().contains(query.toLowerCase());
+        return titleMatch || descMatch;
+      }).toList();
+    }
+  }
 
   void setFilter(String filter) {
     activeFilter.value = filter;
     applyFilters();
   }
 
-  final RxString completionFilter = 'all'.obs;
-  final RxString priorityFilter = 'all'.obs;
-
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    loadTasks();
-    ever(activeFilter, (_) => applyFilters());
-    ever(searchQuery, (_) => applyFilters());
-    ever(tasks, (_) => applyFilters());
+  void applyFilters() {
+    if (activeFilter.value == 'completed') {
+      filteredTasks.value = tasks.where((task) => task.isCompleted).toList();
+      return;
+    } else if (activeFilter.value == 'incomplete') {
+      filteredTasks.value = tasks.where((task) => !task.isCompleted).toList();
+      return;
+    } else if (activeFilter.value == 'High') {
+      filteredTasks.value = tasks.where((task) => task.priority == 'High').toList();
+      return;
+    } else if (activeFilter.value == 'Medium') {
+      filteredTasks.value = tasks.where((task) => task.priority == 'Medium').toList();
+      return;
+    } else if (activeFilter.value == 'Low') {
+      filteredTasks.value = tasks.where((task) => task.priority == 'Low').toList();
+      return;
+    } else {
+      filteredTasks.value = tasks;
+    }
   }
 
+  void toggleComplete(TaskModel task) {
+    task.isCompleted = !task.isCompleted;
+    updateTask(task);
+  }
 
-
-
-  void loadTasks() {
+  Future<void> loadTask() async {
+    if (isLoading.value) return;
     try {
-      isLoading.value = true;
       final uid = FirebaseAuth.instance.currentUser!.uid;
+      isLoading.value = true;
       FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
@@ -45,77 +76,19 @@ class TaskController extends GetxController {
           .orderBy('dueDate')
           .snapshots()
           .listen((snapshot) {
-            final fetchedTasks = snapshot.docs.map((doc) => TaskModel.fromFirestore(doc)).toList();
-
-            tasks.value = fetchedTasks;
-            // searchTasks.value = fetchedTasks;
-            isLoading.value = false;
+            tasks.value = snapshot.docs.map((doc) => TaskModel.fromFirestore(doc)).toList();
+            filteredTasks.value = tasks;
           });
+
     } catch (e) {
       isLoading.value = false;
       print("task fetching error ${e.toString()}");
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void applyFilters() {
-    List<TaskModel> filtered = tasks;
 
-    // Completion filters
-    if (activeFilter.value == 'completed') {
-      filtered = filtered.where((task) => task.isCompleted).toList();
-    } else if (activeFilter.value == 'incomplete') {
-      filtered = filtered.where((task) => !task.isCompleted).toList();
-    }
-
-    // Priority filters
-    else if (activeFilter.value == 'high') {
-      filtered = filtered.where((task) => task.priority == 'high').toList();
-    } else if (activeFilter.value == 'medium') {
-      filtered = filtered.where((task) => task.priority == 'medium').toList();
-    } else if (activeFilter.value == 'low') {
-      filtered = filtered.where((task) => task.priority == 'low').toList();
-    }
-
-    // Search
-    if (searchQuery.value.isNotEmpty) {
-      final query = searchQuery.value.toLowerCase();
-      filtered = filtered.where((task) =>
-      task.title.toLowerCase().contains(query) ||
-          task.description.toLowerCase().contains(query)).toList();
-    }
-
-    searchTasks.value = filtered;
-  }
-
-
-  void setCompletionFilter(String filter) {
-    completionFilter.value = filter;
-  }
-
-  void setPriorityFilter(String filter) {
-    priorityFilter.value = filter;
-  }
-
-  void clearFilters() {
-    completionFilter.value = 'all';
-    priorityFilter.value = 'all';
-    searchQuery.value = '';
-  }
-
-  void searchTask(String query) {
-    searchQuery.value = query;
-
-    if (query.isEmpty) {
-      searchTasks.value = tasks;
-    } else {
-      searchTasks.value = tasks.where((task) {
-        final titleMatch = task.title.toLowerCase().contains(query.toLowerCase());
-        final descMatch = task.description.toLowerCase().contains(query.toLowerCase());
-
-        return titleMatch || descMatch;
-      }).toList();
-    }
-  }
 
   Future<void> addTask(TaskModel task) async {
     try {
@@ -127,7 +100,7 @@ class TaskController extends GetxController {
           .add(task.toFirestore());
       Get.snackbar(
         'Success',
-        'Task added successfully',
+        'Task Added successfully',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.green,
         colorText: Colors.white,
@@ -158,6 +131,7 @@ class TaskController extends GetxController {
     }
   }
 
+
   Future<void> deleteTask(String id) async {
     try {
       final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -179,9 +153,7 @@ class TaskController extends GetxController {
       print("task deleting error ${e.toString()}");
     }
   }
-
-  void toggleComplete(TaskModel task) {
-    task.isCompleted = !task.isCompleted;
-    updateTask(task);
-  }
 }
+
+
+

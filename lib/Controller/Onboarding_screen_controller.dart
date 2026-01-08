@@ -16,7 +16,7 @@ class OnboardingScreenController extends GetxController {
     final user = FirebaseAuth.instance.currentUser;
     Get.off(
       () {
-        return user != null ? const HomePage() : const LoginPage();
+        return user != null ? HomePage() : const LoginPage();
       },
       transition: Transition.rightToLeftWithFade,
 

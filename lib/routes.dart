@@ -10,12 +10,10 @@ class AppRoutes {
   static const String signup = '/signup';
   static const String home = '/home';
 
-
-
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const OnboardingScreen()),
     GetPage(name: login, page: () => const LoginPage()),
     GetPage(name: signup, page: () => const RegisterPage()),
-    GetPage(name: home, page: () => const HomePage()),
+    GetPage(name: home, page: () => HomePage()),
   ];
 }
